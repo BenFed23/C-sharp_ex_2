@@ -44,7 +44,7 @@ namespace Ex02
             return m_Matrixboard.GetLength(0);
         }
 
-        public  bool IsCellEmpty(int i_Row, int i_Col)
+        public bool IsCellEmpty(int i_Row, int i_Col)
         {
             bool isEmpty = false;
             if (m_Matrixboard[i_Col,i_Row] == ' ')
@@ -54,6 +54,7 @@ namespace Ex02
            
             return isEmpty;
         }
+
         public bool FillCell(int i_MatrixRow, int i_MatrixCol,char i_characterToFill) //maybe matrix of enum insted of char and need to think about small characters
         {
             bool succesFill=false;
@@ -105,7 +106,6 @@ namespace Ex02
             else if (m_IteratorIndex == totalCells)
             {
                 m_IteratorIndex = 0;
-                hasNext = false;
             }
 
             return hasNext;
