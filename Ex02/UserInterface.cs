@@ -15,11 +15,11 @@ namespace Ex02
         {
             int boardSize = 0;
 
-            Console.WriteLine("Please enter board size (a number between 3 and 9):");
+            ShowMessage("Please enter board size (a number between 3 and 9):");
             string userInput = Console.ReadLine();
             while(!int.TryParse(userInput, out boardSize) || boardSize < 3 || boardSize > 9)
             {
-                Console.WriteLine("Invalid input! Board size should be a number between 3 and 9");
+                ShowMessage("Invalid input! Board size should be a number between 3 and 9");
                 userInput = Console.ReadLine();
             }
 
@@ -30,11 +30,11 @@ namespace Ex02
         {
             int gameModeChoice;
 
-            Console.WriteLine("Please choose game mode: press 1 for 2 players, press 2 for player against computer");
+            ShowMessage("Please choose game mode: press 1 for 2 players, press 2 for player against computer");
             string userInput = Console.ReadLine();
             while(!int.TryParse(userInput, out gameModeChoice) || (gameModeChoice != 1 && gameModeChoice != 2))
             {
-                Console.WriteLine("Invalid Choice! Please enter 1 for 2 players and 2 for player against computer");
+                ShowMessage("Invalid Choice! Please enter 1 for 2 players and 2 for player against computer");
                 userInput = Console.ReadLine();
             }
 
@@ -48,7 +48,7 @@ namespace Ex02
             o_rowNumber = 0;
             o_columnNumber = 0;
 
-            Console.WriteLine("Please enter row and column (seperated by comma) or 'Q' to exit");
+            ShowMessage("Please enter row and column (seperated by comma) or 'Q' to exit");
             while (!isValidInput)
             {
                 string userInput = Console.ReadLine();
@@ -64,7 +64,7 @@ namespace Ex02
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input! Please enter a valid row and column");
+                    ShowMessage("Invalid input! Please enter a valid row and column");
                 }
             }
         }
