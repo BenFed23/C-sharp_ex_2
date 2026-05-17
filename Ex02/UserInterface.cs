@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Ex02
 {
@@ -105,7 +106,7 @@ namespace Ex02
                 char currentChar = i_StringToSplit[i];
                 if (currentChar == ',')
                 {
-                    if(hasFoundComma)
+                    if (hasFoundComma)
                     {
                         isValidTwoNumbersAndComma = false;
                     }
@@ -135,6 +136,8 @@ namespace Ex02
             }
 
             return isValidTwoNumbersAndComma;
+        }
+
         public static void DrawBoard(char[,] i_gameBoard) 
         {
             //darw bord like in the picture
