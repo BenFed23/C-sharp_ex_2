@@ -5,12 +5,9 @@ namespace Ex02
 {
     internal class UserInterface
     {
-        public int m_boardSize;
-
         public void GetGameSettingsFromUser(out int o_BoardSize, out bool o_isComputerPlayer)
         {
             o_BoardSize = GetValidBoardSize();
-            this.m_boardSize = o_BoardSize;
             o_isComputerPlayer = GetValidGameMode();
         }
 
@@ -44,7 +41,7 @@ namespace Ex02
             return gameModeChoice == 2;
         }
 
-        public void GetValidNextMoveFromUser(out int o_rowNumber, out int o_columnNumber, out bool o_wasQKeyPressed)
+        public void GetValidNextMoveFromUser(int i_BoardSize, out int o_rowNumber, out int o_columnNumber, out bool o_wasQKeyPressed)
         {
             bool isValidInput = false;
             o_wasQKeyPressed = false;
@@ -61,7 +58,7 @@ namespace Ex02
                     isValidInput = true;
                     o_wasQKeyPressed = true;
                 }
-                else if (isValidTwoNumbersSplitByComma(userInput, out o_rowNumber, out o_columnNumber) && isValidRowAndColumn(o_rowNumber, o_columnNumber))
+                else if (isValidTwoNumbersSplitByComma(userInput, out o_rowNumber, out o_columnNumber) && isValidRowAndColumn(o_rowNumber, o_columnNumber, i_BoardSize))
                 {
                     isValidInput = true;
                 }
@@ -72,11 +69,11 @@ namespace Ex02
             }
         }
 
-        private bool isValidRowAndColumn(int i_rowNumber, int i_columnNumber)
+        private bool isValidRowAndColumn(int i_rowNumber, int i_columnNumber, int i_BoardSize)
         {
             bool isValidRowAndColumn = false;
 
-            if (i_rowNumber <= m_boardSize && i_columnNumber <= m_boardSize)
+            if (i_rowNumber <= i_BoardSize && i_columnNumber <= i_BoardSize)
             {
                 if(i_rowNumber > 0 && i_columnNumber > 0)
                 {
