@@ -1,28 +1,28 @@
 ﻿using System;
 
-
 namespace Ex02
 {
     internal class TicTacToeBoard
     {
-        private readonly int m_length;
-        private readonly int m_width;
-        private char[,] m_Matrixboard;
-        private int m_IteratorIndex;
-
-        public TicTacToeBoard(int length, int width) 
+        public enum CellState
         {
-            m_length = length;
-            m_width = width;
-            m_Matrixboard=new char[width,m_width];
-            m_IteratorIndex = 0;
-            
-            fillBoardWithBlankSpaces();
+            Empty= ' ',
+            X= 'X',
+            O='O'
         }
-
-        public char this[int i_Row, int i_Col]
+        private readonly int m_boardSize;
+        private CellState[,] m_Matrixboard;
+        public TicTacToeBoard(int i_boardSize)
         {
-            get 
+            m_boardSize = i_boardSize;
+            m_Matrixboard = new CellState[m_boardSize, m_boardSize];
+            fillBoardWithBlankSpaces();
+
+        }
+      
+        public CellState this[int i_Row, int i_Col]
+        {
+            get
             {
                 return m_Matrixboard[i_Row, i_Col];
             }
@@ -47,44 +47,69 @@ namespace Ex02
         public bool IsCellEmpty(int i_Row, int i_Col)
         {
             bool isEmpty = false;
-            if (m_Matrixboard[i_Col,i_Row] == ' ')
+            if (m_Matrixboard[i_Row, i_Col] == CellState.Empty)
             {
                 isEmpty = true;
             }
-           
+
             return isEmpty;
         }
-
-        public bool FillCell(int i_MatrixRow, int i_MatrixCol,char i_characterToFill) //maybe matrix of enum insted of char and need to think about small characters
+      
+        public bool FillCell(int i_MatrixRow, int i_MatrixCol, Player i_currentPlayer)
         {
-            bool succesFill=false;
-            if (!this.IsCellEmpty(i_MatrixRow, i_MatrixCol)) 
+            bool succesFill = false;
+            if(!ValidLenght(i_MatrixRow , i_MatrixCol))
             {
-                UserInterface.ShowMessage("The cell is full,pick another cell");
-                return succesFill;
-            }
-           else if ((i_MatrixCol > m_width) || (i_MatrixRow > m_length))
-            {
-                
+
                 UserInterface.ShowMessage("The cell doesn't exist on the board ");
                 //clear
 
                 return succesFill;
             }
-            else if ((i_characterToFill != 'X') && (i_characterToFill != 'O'))
+            else if (!this.IsCellEmpty(i_MatrixRow, i_MatrixCol))
             {
-                UserInterface.ShowMessage("Invalid character ");
+                UserInterface.ShowMessage("The cell is full,pick another cell");
                 //clear
 
                 return succesFill;
             }
             else
             {
-                m_Matrixboard[i_MatrixCol, i_MatrixRow] = i_characterToFill;
+                m_Matrixboard[i_MatrixRow, i_MatrixCol] = i_currentPlayer.Sighn;
                 succesFill = true;
 
                 return succesFill;
             }
+        }
+      
+        public bool ValidLength(int i_Row, int i_Col)
+        {
+            bool isValid=true;
+            if ((i_Row >= m_boardSize) || (i_Col >= m_boardSize) || (i_Row < 0) || (i_Col < 0)) 
+            {
+                isValid = false;
+                
+            }
+            
+            return isValid;
+        }
+      
+        public bool CheckIfBoardIsFull()
+        {
+            bool boardIsFull=true;
+            for(int i = 0; i < m_boardSize; i++)
+            {
+                for(int j = 0; j < m_boardSize; j++)
+                {
+                    if (m_Matrixboard[i, j] == CellState.Empty)
+                    {
+                        boardIsFull = false;
+
+                        return boardIsFull;
+                    }
+                }
+            }
+            return boardIsFull;
         }
 
         public bool TryGetNextCell (out char o_CellValue)

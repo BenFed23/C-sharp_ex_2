@@ -37,7 +37,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameEngine.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="TicTacToeBoard.cs" />

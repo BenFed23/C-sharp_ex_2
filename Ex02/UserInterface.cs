@@ -135,7 +135,8 @@ namespace Ex02
             return isValidTwoNumbersAndComma;
         }
 
-        public static void DrawBoard(char[,] i_gameBoard) 
+        
+        public static void DrawBoard(TicTacToeBoard.CellState[,] i_gameBoard,int i_bordsize) 
         {
             //darw bord like in the picture
             //fill the board
@@ -144,6 +145,7 @@ namespace Ex02
                 Console.WriteLine(item); 
             }
         }
+      
         public static void ShowMessage(string message) 
         {
             Console.WriteLine(message);

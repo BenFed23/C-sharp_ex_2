@@ -90,5 +90,5 @@ namespace Ex02
         {
             m_CurrentPlayer = (m_CurrentPlayer == m_Player1) ? m_Player2 : m_Player1;
         }
-    }
+    } 
 }
