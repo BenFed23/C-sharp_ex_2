@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ex02
 {
@@ -139,6 +135,18 @@ namespace Ex02
             }
 
             return isValidTwoNumbersAndComma;
+        public static void DrawBoard(char[,] i_gameBoard) 
+        {
+            //darw bord like in the picture
+            //fill the board
+            foreach (char item in i_gameBoard)
+            {
+                Console.WriteLine(item); 
+            }
+        }
+        public static void ShowMessage(string message) 
+        {
+            Console.WriteLine(message);
         }
     }
 }
