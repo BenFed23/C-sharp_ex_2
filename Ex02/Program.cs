@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Ex02
 {
@@ -10,7 +7,9 @@ namespace Ex02
     {
         public static void Main() 
         {
-
+            Game newGame = new Game();
+            newGame.Run();
+            //checkForRemack();
         }
     }
 }

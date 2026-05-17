@@ -5,7 +5,7 @@ namespace Ex02
 {
     internal class UserInterface
     {
-        public static void DrawBoard(char[,] i_gameBoard) 
+        public static void DrawBoard(TicTacToeBoard.CellState[,] i_gameBoard,int i_bordsize) 
         {
             //darw bord like in the picture
             //fill the board
