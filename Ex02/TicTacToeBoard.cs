@@ -12,10 +12,13 @@ namespace Ex02
         }
         private readonly int m_boardSize;
         private CellState[,] m_Matrixboard;
+        private int m_IteratorIndex;
+
         public TicTacToeBoard(int i_boardSize)
         {
             m_boardSize = i_boardSize;
             m_Matrixboard = new CellState[m_boardSize, m_boardSize];
+            m_IteratorIndex = 0;
             fillBoardWithBlankSpaces();
 
         }
@@ -30,11 +33,11 @@ namespace Ex02
 
         private void fillBoardWithBlankSpaces()
         {
-            for (int row = 0; row < m_length; ++row)
+            for (int row = 0; row < m_boardSize; ++row)
             {
-                for (int col = 0; col < m_width; ++col)
+                for (int col = 0; col < m_boardSize; ++col)
                 {
-                    m_Matrixboard[row, col] = ' ';
+                    m_Matrixboard[row, col] = CellState.Empty;
                 }
             }
         }
@@ -57,28 +60,28 @@ namespace Ex02
       
         public bool FillCell(int i_MatrixRow, int i_MatrixCol, Player i_currentPlayer)
         {
-            bool succesFill = false;
-            if(!ValidLenght(i_MatrixRow , i_MatrixCol))
+            bool successFill = false;
+            if(!ValidLength(i_MatrixRow , i_MatrixCol))
             {
 
                 UserInterface.ShowMessage("The cell doesn't exist on the board ");
                 //clear
 
-                return succesFill;
+                return successFill;
             }
             else if (!this.IsCellEmpty(i_MatrixRow, i_MatrixCol))
             {
                 UserInterface.ShowMessage("The cell is full,pick another cell");
                 //clear
 
-                return succesFill;
+                return successFill;
             }
             else
             {
-                m_Matrixboard[i_MatrixRow, i_MatrixCol] = i_currentPlayer.Sighn;
-                succesFill = true;
+                m_Matrixboard[i_MatrixRow, i_MatrixCol] = i_currentPlayer.Sign;
+                successFill = true;
 
-                return succesFill;
+                return successFill;
             }
         }
       
@@ -112,12 +115,12 @@ namespace Ex02
             return boardIsFull;
         }
 
-        public bool TryGetNextCell (out char o_CellValue)
+        public bool TryGetNextCell (out CellState o_CellValue)
         {
             int boardSize = m_Matrixboard.GetLength(0);
             int totalCells = boardSize * boardSize;
             bool hasNext = false;
-            o_CellValue = ' ';
+            o_CellValue = CellState.Empty;
 
             if (m_IteratorIndex < totalCells)
             {
