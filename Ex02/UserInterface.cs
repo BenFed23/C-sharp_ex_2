@@ -135,17 +135,56 @@ namespace Ex02
             return isValidTwoNumbersAndComma;
         }
 
-        
-        public static void DrawBoard(TicTacToeBoard.CellState[,] i_gameBoard,int i_bordsize) 
+
+        public static void DrawBoard(TicTacToeBoard i_gameBoard)
         {
-            //darw bord like in the picture
-            //fill the board
-            foreach (char item in i_gameBoard)
+            int boardSize = i_gameBoard.GetLength();
+
+            // 1. הדפסת שורת מספרי העמודות (רווח התחלתי חד-פעמי ואז המספרים)
+            Console.Write("    ");
+            for (int i = 1; i <= boardSize; ++i)
             {
-                Console.WriteLine(item); 
+                Console.Write($"{i}   ");
+            }
+            Console.WriteLine(); // ירידת שורה קריטית כדי לנתק את הכותרת מהלוח
+
+            // 2. ריצה על השורות של הלוח
+            for (int row = 0; row < boardSize; row++)
+            {
+                // הדפסת תחילת השורה (למשל: 1 |)
+                Console.Write($"{row + 1} |");
+
+                // לולאה פנימית להדפסת התאים באותה השורה
+                for (int col = 0; col < boardSize; col++)
+                {
+                    char cellSign = ' ';
+                    if (i_gameBoard[row, col] == TicTacToeBoard.CellState.X)
+                    {
+                        cellSign = 'X';
+                    }
+                    else if (i_gameBoard[row, col] == TicTacToeBoard.CellState.O)
+                    {
+                        cellSign = 'O';
+                    }
+
+                    Console.Write($" {cellSign} |");
+                }
+                Console.WriteLine();
+
+                // 3. הדפסת שורת ההפרדה (רק אם אנחנו *לא* בשורה האחרונה בלוח)
+                if (row < boardSize - 1)
+                {
+                    Console.Write("  ");
+                    for (int j = 0; j < boardSize; j++)
+                    {
+                        Console.Write("====");
+                    }
+                    Console.Write("=");
+                    Console.WriteLine();
+                }
             }
         }
-      
+
         public static void ShowMessage(string message) 
         {
             Console.WriteLine(message);

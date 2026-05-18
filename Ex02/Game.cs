@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Ex02.ConsoleUtils;
 
 namespace Ex02
 {
@@ -31,43 +31,60 @@ namespace Ex02
 
         private void runGameLoop()
         {
+
             bool isGameOver = false;
+            int boardRow = 0;
+            int boardColumn = 0;
 
             while (!isGameOver)
             {
+                Screen.Clear();
                 UserInterface.DrawBoard(m_Board);
                 UserInterface.ShowMessage($"Player {m_CurrentPlayer.Name}'s turn.");
-
-                int boardRow = 0;
-                int boardColumn = 0;
                 bool wasQKeyPressed = false;
+                int boardRowIndex = 0;
+                int boardColIndex = 0;
 
                 if (m_CurrentPlayer == m_Player2 && m_IsAgainstComputer)
                 {
                     UserInterface.ShowMessage("Computer is thinking...");
-                    //computer move logic 
+                    GameEngine.ComputerMove(m_Board, boardRow - 1, boardColumn - 1, m_Player2);
+                    //GameEngine.ComputerMove(m_Board, boardRowIndex, boardColIndex, m_Player2);
                 }
                 else
                 {
+                   
                     m_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out wasQKeyPressed);
+                    if (wasQKeyPressed)
+                    {
+                        UserInterface.ShowMessage("Game stopped by User");
+                        break;
+                    }
+
+                     boardRowIndex = boardRow - 1;
+                     boardColIndex = boardColumn - 1;
+                    bool isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer);
+                    while (!isMoveSuccessful)
+                    {
+                        UserInterface.ShowMessage("This cell is already full! Choose another one.");
+                        m_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out wasQKeyPressed);
+                        if (wasQKeyPressed)
+                        {
+                            UserInterface.ShowMessage("Game stopped by User");
+                            isGameOver = true;
+                            break;
+                        }
+                         boardRowIndex = boardRow - 1;
+                        boardColIndex = boardColumn - 1;
+                        isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer);
+                    }
                 }
 
-                if (wasQKeyPressed)
-                {
-                    UserInterface.ShowMessage("Game stopped by User");
-                    break;
-                }
-
-                int boardRowIndex = boardRow - 1;
-                int boardColIndex = boardColumn - 1;
-                bool isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer);
-                while (!isMoveSuccessful)
-                {
-                    UserInterface.ShowMessage("This cell is already full! Choose another one.");
-                }
+               
 
                 if (m_Engine.IsFullRowColumnOrDiagonalInBoard(m_Board))
                 {
+                    Screen.Clear();
                     UserInterface.DrawBoard(m_Board);
                     m_CurrentPlayer.Score++;
                     UserInterface.ShowMessage($"Player {m_CurrentPlayer.Sign} Won! Score: {m_CurrentPlayer.Score}");
@@ -75,6 +92,7 @@ namespace Ex02
                 }
                 else if (m_Engine.isFullBoard(m_Board))
                 {
+                    Screen.Clear();
                     UserInterface.DrawBoard(m_Board);
                     UserInterface.ShowMessage("It's a tie! The board is full.");
                     isGameOver = true;

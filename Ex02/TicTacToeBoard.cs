@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ex02.ConsoleUtils;
+using System;
 
 namespace Ex02
 {
@@ -30,6 +31,7 @@ namespace Ex02
                 return m_Matrixboard[i_Row, i_Col];
             }
         }
+        
 
         private void fillBoardWithBlankSpaces()
         {
@@ -65,14 +67,14 @@ namespace Ex02
             {
 
                 UserInterface.ShowMessage("The cell doesn't exist on the board ");
-                //clear
+                Screen.Clear();
 
                 return successFill;
             }
             else if (!this.IsCellEmpty(i_MatrixRow, i_MatrixCol))
             {
                 UserInterface.ShowMessage("The cell is full,pick another cell");
-                //clear
+                Screen.Clear();
 
                 return successFill;
             }
