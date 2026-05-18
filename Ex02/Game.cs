@@ -16,15 +16,15 @@ namespace Ex02
         public Game() 
         {
             m_UserInterface = new UserInterface();
-            m_Player1 = new Player('X', "Player 1");
-            m_Player2 = new Player('O', "Player 2");
+            m_Player1 = new Player(TicTacToeBoard.CellState.X, "Player 1");
+            m_Player2 = new Player(TicTacToeBoard.CellState.O, "Player 2");
 
             m_CurrentPlayer = m_Player1;
         }
         public void Run() 
         {
             m_UserInterface.GetGameSettingsFromUser(out int boardSize, out m_IsAgainstComputer);
-            m_Board = new TicTacToeBoard(boardSize, boardSize);
+            m_Board = new TicTacToeBoard(boardSize);
             m_Engine = new GameEngine();
             runGameLoop();
         }
@@ -60,7 +60,7 @@ namespace Ex02
 
                 int boardRowIndex = boardRow - 1;
                 int boardColIndex = boardColumn - 1;
-                bool isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer.Sign);
+                bool isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer);
                 while (!isMoveSuccessful)
                 {
                     UserInterface.ShowMessage("This cell is already full! Choose another one.");

@@ -43,9 +43,9 @@ namespace Ex02
         {
             int boardSize = i_board.GetLength();
             bool isLineFull = true;
-            char firstInLine = i_board[i_StartRowIndex, i_StartColumnIndex];
+            TicTacToeBoard.CellState firstInLine = i_board[i_StartRowIndex, i_StartColumnIndex];
 
-            if(firstInLine == ' ')
+            if(firstInLine == TicTacToeBoard.CellState.Empty)
             {
                 isLineFull = false;
             }
@@ -74,9 +74,9 @@ namespace Ex02
         {
             bool isFullBoard = true;
 
-            while(isFullBoard && i_board.TryGetNextCell(out char currentCell))
+            while(isFullBoard && i_board.TryGetNextCell(out TicTacToeBoard.CellState currentCell))
             {
-                if (currentCell == ' ')
+                if (currentCell == TicTacToeBoard.CellState.Empty)
                 {
                     isFullBoard = false;
                 }
