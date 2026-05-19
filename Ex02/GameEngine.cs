@@ -13,7 +13,6 @@ namespace Ex02
             bool isFullLeftToRightDiagonal = false;
             bool isFullRightToLeftDiagonal = false;
 
-
             for (int i = 0; i < boardSize; ++i)
             {
                 if(checkIfLineIsFull(i_board, i, 0, 0, 1))
@@ -55,7 +54,6 @@ namespace Ex02
             {
                 int currentRow = i_StartRowIndex;
                 int currentColumnIndex = i_StartColumnIndex;
-
                 for( int i = 0; i< boardSize; ++i ) 
                 {
                     if (i_board[currentRow, currentColumnIndex] != firstInLine) 
@@ -81,6 +79,7 @@ namespace Ex02
             bool successMiroring=true;
             int mirorRow = i_gameBoard.GetLength() - 1 - i_boardRow;
             int mirorColom = i_gameBoard.GetLength() - 1 - i_boardColom;
+
             if (!i_gameBoard.IsCellEmpty(mirorRow, mirorColom))
             {
                 successMiroring = false;
@@ -94,11 +93,12 @@ namespace Ex02
         }
         public static bool MinDamage(TicTacToeBoard i_gameBoard, TicTacToeBoard.CellState i_ComputerSign)
         {
-            bool successMove=true;
+            bool successMove = true;
             const int k_InitialMaxRisk = 100;
             int minRisk = k_InitialMaxRisk;
             int minCellRow = 0;
             int minCellColom = 0;
+
             for (int i = 0; i < i_gameBoard.GetLength(); i++)
             {
                for(int j = 0; j < i_gameBoard.GetLength(); j++)
@@ -109,8 +109,6 @@ namespace Ex02
                     if (i_gameBoard.IsCellEmpty(i, j))
                     {
                         GetCellRisk(i_gameBoard, i_ComputerSign, i, j,out rowOCount, out colomOCount, out leftDiagonalOCount);
-
-
                         int maxCellOCount = Math.Max(rowOCount, colomOCount);
                         int maxCellDiagonalOCount = Math.Max(leftDiagonalOCount, maxCellOCount);
                         int maxOcount = Math.Max(maxCellOCount, maxCellDiagonalOCount);
@@ -121,8 +119,9 @@ namespace Ex02
                             minRisk = maxOcount;
                         }
                     }
-                }
+               }
             }
+
             if (minRisk < i_gameBoard.GetLength() - 1)
             {
                 i_gameBoard.FillCell(minCellRow, minCellColom, i_ComputerSign);
@@ -143,12 +142,9 @@ namespace Ex02
             for (int i = 0; i < i_gameBoard.GetLength(); i++)
             {
                 int row = (startRow + i) % i_gameBoard.GetLength();
-
                 for (int j = 0; j < i_gameBoard.GetLength(); j++)
                 {
                     int col = (startCol + j) % i_gameBoard.GetLength();
-
-                   
                     if (i_gameBoard.IsCellEmpty(row, col))
                     {
                         i_gameBoard.FillCell(row, col, i_ComputerSign);
@@ -171,6 +167,7 @@ namespace Ex02
         public static bool trySmartMove(TicTacToeBoard i_board, TicTacToeBoard.CellState i_computerSign)
         {
             bool ismoveMade = false;
+
             ismoveMade = MinDamage(i_board, i_computerSign);
             
             return ismoveMade;
@@ -181,6 +178,7 @@ namespace Ex02
             o_rowOCount = 0;
             o_colomOCount = 0;
             o_leftDiagonalOCount = 0;
+
             for (int k = 0; k < i_gameBoard.GetLength(); k++)
             {
                 if (i_gameBoard[i_extendIndex, k] == i_ComputerSign)

@@ -146,8 +146,8 @@ namespace Ex02
             {
                 Console.Write($"{i}   ");
             }
-            Console.WriteLine();
 
+            Console.WriteLine();
             for (int row = 0; row < boardSize; row++)
             {
                 Console.Write($"{row + 1} |");
@@ -165,6 +165,7 @@ namespace Ex02
                     {
                         Console.Write("====");
                     }
+
                     Console.Write("=");
                     Console.WriteLine();
                 }
@@ -195,6 +196,7 @@ namespace Ex02
         {
             bool isValidInput = false;
             bool isContinueToRematch = false;
+
             while (!isValidInput)
             {
                 ShowMessage("Would you like to play another round? (Y/N):");

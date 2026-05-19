@@ -15,15 +15,14 @@ namespace Ex02
             m_sign = i_sign;
             m_name = i_name;
             m_score = 0;
-          
         }
+
         public TicTacToeBoard.CellState Sign
         {
             get
             {
                 return m_sign;
-            }
-           
+            }   
         }
       
         public int Score

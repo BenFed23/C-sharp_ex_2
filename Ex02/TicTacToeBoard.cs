@@ -19,7 +19,6 @@ namespace Ex02
             m_boardSize = i_boardSize;
             m_Matrixboard = new CellState[m_boardSize, m_boardSize];
             fillBoardWithBlankSpaces();
-
         }
       
         public CellState this[int i_Row, int i_Col]
@@ -44,12 +43,13 @@ namespace Ex02
 
         public int GetLength()
         {
-            return m_Matrixboard.GetLength(0);
+            return m_boardSize;
         }
 
         public bool IsCellEmpty(int i_Row, int i_Col)
         {
             bool isEmpty = false;
+
             if (m_Matrixboard[i_Row, i_Col] == CellState.Empty)
             {
                 isEmpty = true;
@@ -74,6 +74,7 @@ namespace Ex02
         public bool ValidLength(int i_Row, int i_Col)
         {
             bool isValid=true;
+
             if ((i_Row >= m_boardSize) || (i_Col >= m_boardSize) || (i_Row < 0) || (i_Col < 0)) 
             {
                 isValid = false;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Ex02.ConsoleUtils;
 
 namespace Ex02
 {
@@ -38,20 +37,18 @@ namespace Ex02
 
         private void runGameLoop()
         {
-
             bool isGameOver = false;
             int boardRow = 0;
             int boardColumn = 0;
 
             while (!isGameOver)
             {
-                Screen.Clear();
+                m_UserInterface.ClearScreen();
                 m_UserInterface.DrawBoard(m_Board);
                 m_UserInterface.AnnounceTurn(m_CurrentPlayer.Name);
                 bool wasQKeyPressed = false;
                 int boardRowIndex = 0;
                 int boardColIndex = 0;
-
                 if (m_CurrentPlayer == m_Player2 && m_IsAgainstComputer)
                 {
                     GameEngine.ComputerMove(m_Board, m_Player2.Sign);
@@ -80,7 +77,8 @@ namespace Ex02
                             isGameOver = true;
                             break;
                         }
-                         boardRowIndex = boardRow - 1;
+
+                        boardRowIndex = boardRow - 1;
                         boardColIndex = boardColumn - 1;
                         isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer.Sign);
                     }
