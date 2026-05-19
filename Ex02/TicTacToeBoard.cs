@@ -140,5 +140,10 @@ namespace Ex02
 
             return hasNext;
         }
+
+        public void ResetIterator()
+        {
+            m_IteratorIndex = 0;
+        }
     }
 }

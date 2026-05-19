@@ -73,6 +73,7 @@ namespace Ex02
                     bool isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer);
                     while (!isMoveSuccessful)
                     {
+                        UserInterface.DrawBoard(m_Board);
                         UserInterface.ShowMessage("This cell is already full! Choose another one.");
                         m_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out wasQKeyPressed);
                         if (wasQKeyPressed)

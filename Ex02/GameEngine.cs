@@ -74,8 +74,9 @@ namespace Ex02
         public bool isFullBoard (TicTacToeBoard i_board)
         {
             bool isFullBoard = true;
+            i_board.ResetIterator();
 
-            while(isFullBoard && i_board.TryGetNextCell(out TicTacToeBoard.CellState currentCell))
+            while (isFullBoard && i_board.TryGetNextCell(out TicTacToeBoard.CellState currentCell))
             {
                 if (currentCell == TicTacToeBoard.CellState.Empty)
                 {
@@ -83,8 +84,11 @@ namespace Ex02
                 }
             }
 
+            i_board.ResetIterator();
+
             return isFullBoard;
         }
+
         public static bool MiroringOpponet(TicTacToeBoard i_gameBoard,int i_boardRow ,int i_boardColom, Player i_computerPlayer )
         {
             bool successMiroring=true;
