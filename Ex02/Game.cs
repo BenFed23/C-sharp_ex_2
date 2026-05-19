@@ -46,65 +46,61 @@ namespace Ex02
             while (!isGameOver)
             {
                 Screen.Clear();
-                UserInterface.DrawBoard(m_Board);
-                UserInterface.ShowMessage($"Player {m_CurrentPlayer.Name}'s turn.");
+                m_UserInterface.DrawBoard(m_Board);
+                m_UserInterface.AnnounceTurn(m_CurrentPlayer.Name);
                 bool wasQKeyPressed = false;
                 int boardRowIndex = 0;
                 int boardColIndex = 0;
 
                 if (m_CurrentPlayer == m_Player2 && m_IsAgainstComputer)
                 {
-                    UserInterface.ShowMessage("Computer is thinking...");
-                    GameEngine.ComputerMove(m_Board, boardRow - 1, boardColumn - 1, m_Player2);
-                    //GameEngine.ComputerMove(m_Board, boardRowIndex, boardColIndex, m_Player2);
+                    GameEngine.ComputerMove(m_Board, m_Player2.Sign);
                 }
                 else
                 {
-                   
                     m_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out wasQKeyPressed);
                     if (wasQKeyPressed)
                     {
-                        UserInterface.ShowMessage("Game stopped by User");
+                        m_UserInterface.AnnounceGameStopped();
                         break;
                     }
 
-                     boardRowIndex = boardRow - 1;
-                     boardColIndex = boardColumn - 1;
-                    bool isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer);
+                    boardRowIndex = boardRow - 1;
+                    boardColIndex = boardColumn - 1;
+                    bool isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer.Sign);
                     while (!isMoveSuccessful)
                     {
-                        UserInterface.DrawBoard(m_Board);
-                        UserInterface.ShowMessage("This cell is already full! Choose another one.");
+                        m_UserInterface.ClearScreen();
+                        m_UserInterface.DrawBoard(m_Board);
+                        m_UserInterface.AnnounceInvalidMove();
                         m_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out wasQKeyPressed);
                         if (wasQKeyPressed)
                         {
-                            UserInterface.ShowMessage("Game stopped by User");
+                            m_UserInterface.AnnounceGameStopped();
                             isGameOver = true;
                             break;
                         }
                          boardRowIndex = boardRow - 1;
                         boardColIndex = boardColumn - 1;
-                        isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer);
+                        isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer.Sign);
                     }
                 }
 
-               
-
                 if (m_Engine.IsFullRowColumnOrDiagonalInBoard(m_Board))
                 {
-                    Screen.Clear();
-                    UserInterface.DrawBoard(m_Board);
-                    Player winner = (m_CurrentPlayer == m_Player1) ? m_Player2 : m_Player1;
+                    m_UserInterface.ClearScreen();
+                    m_UserInterface.DrawBoard(m_Board);
+                    TicTacToeBoard.CellState winningSign = m_Engine.GetWinningSign(m_Player1.Sign, m_Player2.Sign, m_CurrentPlayer.Sign);
+                    Player winner = (winningSign == m_Player1.Sign) ? m_Player1 : m_Player2;
                     winner.Score++;
-                    UserInterface.ShowMessage($"Player {m_CurrentPlayer.Name} created a sequence and lost!");
-                    UserInterface.ShowMessage($"Player {winner.Name} ({winner.Sign}) Won! Score: {winner.Score}");
+                    m_UserInterface.AnnounceGameOver(m_CurrentPlayer.Name, winner.Name, winner.Score);
                     isGameOver = true;
                 }
                 else if (m_Engine.isFullBoard(m_Board))
                 {
-                    Screen.Clear();
-                    UserInterface.DrawBoard(m_Board);
-                    UserInterface.ShowMessage("It's a tie! The board is full.");
+                    m_UserInterface.ClearScreen();
+                    m_UserInterface.DrawBoard(m_Board);
+                    m_UserInterface.AnnounceTie();
                     isGameOver = true;
                 }
                 else

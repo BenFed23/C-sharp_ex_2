@@ -7,19 +7,17 @@ namespace Ex02
     {
         public enum CellState
         {
-            Empty= ' ',
-            X= 'X',
-            O='O'
+            Empty,
+            X,
+            O
         }
         private readonly int m_boardSize;
         private CellState[,] m_Matrixboard;
-        private int m_IteratorIndex;
 
         public TicTacToeBoard(int i_boardSize)
         {
             m_boardSize = i_boardSize;
             m_Matrixboard = new CellState[m_boardSize, m_boardSize];
-            m_IteratorIndex = 0;
             fillBoardWithBlankSpaces();
 
         }
@@ -60,31 +58,17 @@ namespace Ex02
             return isEmpty;
         }
       
-        public bool FillCell(int i_MatrixRow, int i_MatrixCol, Player i_currentPlayer)
+        public bool FillCell(int i_MatrixRow, int i_MatrixCol, CellState i_PlayerSign)
         {
             bool successFill = false;
-            if(!ValidLength(i_MatrixRow , i_MatrixCol))
-            {
 
-                UserInterface.ShowMessage("The cell doesn't exist on the board ");
-                Screen.Clear();
-
-                return successFill;
-            }
-            else if (!this.IsCellEmpty(i_MatrixRow, i_MatrixCol))
+            if (ValidLength(i_MatrixRow, i_MatrixCol) && IsCellEmpty(i_MatrixRow, i_MatrixCol))
             {
-                UserInterface.ShowMessage("The cell is full,pick another cell");
-                Screen.Clear();
-
-                return successFill;
-            }
-            else
-            {
-                m_Matrixboard[i_MatrixRow, i_MatrixCol] = i_currentPlayer.Sign;
+                m_Matrixboard[i_MatrixRow, i_MatrixCol] = i_PlayerSign;
                 successFill = true;
-
-                return successFill;
             }
+
+            return successFill;
         }
       
         public bool ValidLength(int i_Row, int i_Col)
@@ -98,52 +82,24 @@ namespace Ex02
             
             return isValid;
         }
-      
+
         public bool CheckIfBoardIsFull()
         {
-            bool boardIsFull=true;
-            for(int i = 0; i < m_boardSize; i++)
-            {
-                for(int j = 0; j < m_boardSize; j++)
-                {
-                    if (m_Matrixboard[i, j] == CellState.Empty)
-                    {
-                        boardIsFull = false;
+            bool isBoardFull = true;
 
-                        return boardIsFull;
+            for (int i = 0; i< m_boardSize; ++i)
+            {
+                for(int j = 0; j < m_boardSize; ++j)
+                {
+                    if (m_Matrixboard[i,j] == CellState.Empty)
+                    {
+                        isBoardFull = false;
+                        break;
                     }
                 }
             }
-            return boardIsFull;
-        }
 
-        public bool TryGetNextCell (out CellState o_CellValue)
-        {
-            int boardSize = m_Matrixboard.GetLength(0);
-            int totalCells = boardSize * boardSize;
-            bool hasNext = false;
-            o_CellValue = CellState.Empty;
-
-            if (m_IteratorIndex < totalCells)
-            {
-                int row = m_IteratorIndex / boardSize;
-                int column = m_IteratorIndex % boardSize;
-
-                o_CellValue = m_Matrixboard[row, column];
-                m_IteratorIndex++;
-                hasNext = true;
-            }
-            else if (m_IteratorIndex == totalCells)
-            {
-                m_IteratorIndex = 0;
-            }
-
-            return hasNext;
-        }
-
-        public void ResetIterator()
-        {
-            m_IteratorIndex = 0;
+            return isBoardFull;
         }
     }
 }

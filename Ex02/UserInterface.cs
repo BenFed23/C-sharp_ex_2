@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Text;
 
 namespace Ex02
@@ -136,42 +137,27 @@ namespace Ex02
         }
 
 
-        public static void DrawBoard(TicTacToeBoard i_gameBoard)
+        public void DrawBoard(TicTacToeBoard i_gameBoard)
         {
             int boardSize = i_gameBoard.GetLength();
 
-            // 1. הדפסת שורת מספרי העמודות (רווח התחלתי חד-פעמי ואז המספרים)
             Console.Write("    ");
             for (int i = 1; i <= boardSize; ++i)
             {
                 Console.Write($"{i}   ");
             }
-            Console.WriteLine(); // ירידת שורה קריטית כדי לנתק את הכותרת מהלוח
+            Console.WriteLine();
 
-            // 2. ריצה על השורות של הלוח
             for (int row = 0; row < boardSize; row++)
             {
-                // הדפסת תחילת השורה (למשל: 1 |)
                 Console.Write($"{row + 1} |");
-
-                // לולאה פנימית להדפסת התאים באותה השורה
                 for (int col = 0; col < boardSize; col++)
                 {
-                    char cellSign = ' ';
-                    if (i_gameBoard[row, col] == TicTacToeBoard.CellState.X)
-                    {
-                        cellSign = 'X';
-                    }
-                    else if (i_gameBoard[row, col] == TicTacToeBoard.CellState.O)
-                    {
-                        cellSign = 'O';
-                    }
-
+                    char cellSign = getCellCharacter(i_gameBoard[row, col]);
                     Console.Write($" {cellSign} |");
                 }
-                Console.WriteLine();
 
-                // 3. הדפסת שורת ההפרדה (רק אם אנחנו *לא* בשורה האחרונה בלוח)
+                Console.WriteLine();
                 if (row < boardSize - 1)
                 {
                     Console.Write("  ");
@@ -185,13 +171,33 @@ namespace Ex02
             }
         }
 
+        private char getCellCharacter(TicTacToeBoard.CellState i_CellState)
+        {
+            char cellChar = ' ';
+
+            switch(i_CellState)
+            {
+                case TicTacToeBoard.CellState.X:
+                    cellChar = 'X';
+                    break;
+                case TicTacToeBoard.CellState.O:
+                    cellChar = 'O';
+                    break;
+                case TicTacToeBoard.CellState.Empty:
+                    cellChar = ' ';
+                    break;
+            }
+
+            return cellChar;
+        }
+
         public bool AskForRematch()
         {
             bool isValidInput = false;
             bool isContinueToRematch = false;
             while (!isValidInput)
             {
-                UserInterface.ShowMessage("Would you like to play another round? (Y/N):");
+                ShowMessage("Would you like to play another round? (Y/N):");
                 string userInput = Console.ReadLine();
                 if (userInput == "Y")
                 {
@@ -205,16 +211,48 @@ namespace Ex02
                 }
                 else
                 {
-                    UserInterface.ShowMessage("Invalid input. Please enter 'Y' for Yes or 'N' for No.");
+                    ShowMessage("Invalid input. Please enter 'Y' for Yes or 'N' for No.");
                 }
             }
 
             return isContinueToRematch;
         }
 
-        public static void ShowMessage(string message) 
+        public void ShowMessage(string message) 
         {
             Console.WriteLine(message);
+        }
+
+        public void AnnounceTurn(string i_PlayerName)
+        {
+            ShowMessage($"Player {i_PlayerName}'s turn.");
+        }
+
+        public void AnnounceGameStopped()
+        {
+            ShowMessage("Game stopped by User");
+        }
+
+
+        public void AnnounceInvalidMove()
+        {
+            ShowMessage("Invalid move! The cell is either full or out of bounds. Try again.");
+        }
+
+        public void AnnounceGameOver(string i_LoserName, string i_WinnerName, int i_WinnerScore)
+        {
+            ShowMessage($"Player {i_LoserName} created a sequence and lost!");
+            ShowMessage($"Player {i_WinnerName} Won! Score: {i_WinnerScore}");
+        }
+
+        public void AnnounceTie()
+        {
+            ShowMessage("It's a tie! The board is full.");
+        }
+
+        public void ClearScreen()
+        {
+            Ex02.ConsoleUtils.Screen.Clear();
         }
     }
 }
