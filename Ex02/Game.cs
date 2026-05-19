@@ -93,8 +93,10 @@ namespace Ex02
                 {
                     Screen.Clear();
                     UserInterface.DrawBoard(m_Board);
-                    m_CurrentPlayer.Score++;
-                    UserInterface.ShowMessage($"Player {m_CurrentPlayer.Sign} Won! Score: {m_CurrentPlayer.Score}");
+                    Player winner = (m_CurrentPlayer == m_Player1) ? m_Player2 : m_Player1;
+                    winner.Score++;
+                    UserInterface.ShowMessage($"Player {m_CurrentPlayer.Name} created a sequence and lost!");
+                    UserInterface.ShowMessage($"Player {winner.Name} ({winner.Sign}) Won! Score: {winner.Score}");
                     isGameOver = true;
                 }
                 else if (m_Engine.isFullBoard(m_Board))

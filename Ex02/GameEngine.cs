@@ -169,6 +169,7 @@ namespace Ex02
             }
 
         }
+
         public static void ComputerMove(TicTacToeBoard i_gameBoard, int i_boardRow, int i_boardColom, Player i_computerPlayer) 
         {
             bool ismoveMade = MiroringOpponet(i_gameBoard , i_boardRow, i_boardColom , i_computerPlayer);
@@ -181,6 +182,7 @@ namespace Ex02
                 RandomMove(i_gameBoard,  i_computerPlayer);
             }
         }
+
         public static void GetCellRisk(TicTacToeBoard i_gameBoard , Player i_computerPlayer ,int i_extendIndex , int i_inerrIndex , out int o_rowOCount , out int o_colomOCount , out int o_leftDiagonalOCount)
         {
             o_rowOCount = 0;
