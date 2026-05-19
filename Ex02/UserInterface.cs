@@ -185,6 +185,33 @@ namespace Ex02
             }
         }
 
+        public bool AskForRematch()
+        {
+            bool isValidInput = false;
+            bool isContinueToRematch = false;
+            while (!isValidInput)
+            {
+                UserInterface.ShowMessage("Would you like to play another round? (Y/N):");
+                string userInput = Console.ReadLine();
+                if (userInput == "Y")
+                {
+                    isContinueToRematch = true;
+                    isValidInput = true;
+                }
+                else if(userInput == "N")
+                {
+                    isContinueToRematch = false;
+                    isValidInput = true;
+                }
+                else
+                {
+                    UserInterface.ShowMessage("Invalid input. Please enter 'Y' for Yes or 'N' for No.");
+                }
+            }
+
+            return isContinueToRematch;
+        }
+
         public static void ShowMessage(string message) 
         {
             Console.WriteLine(message);

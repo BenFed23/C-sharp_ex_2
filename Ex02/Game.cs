@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Ex02.ConsoleUtils;
 
 namespace Ex02
@@ -23,10 +24,16 @@ namespace Ex02
         }
         public void Run() 
         {
+            bool isCountinueToRematch = true;
             m_UserInterface.GetGameSettingsFromUser(out int boardSize, out m_IsAgainstComputer);
-            m_Board = new TicTacToeBoard(boardSize);
             m_Engine = new GameEngine();
-            runGameLoop();
+            while(isCountinueToRematch)
+            {
+                m_Board = new TicTacToeBoard(boardSize);
+                m_CurrentPlayer = m_Player1;
+                runGameLoop();
+                isCountinueToRematch = m_UserInterface.AskForRematch();
+            }
         }
 
         private void runGameLoop()
