@@ -18,12 +18,10 @@ namespace Ex02
             fillBoardWithBlankSpaces();
         }
       
-        public eCellState this[int i_Row, int i_Col]
+        public eCellState GetCellValue(int i_MatrixRow, int i_MatrixColumn) 
         {
-            get
-            {
-                return m_Matrixboard[i_Row, i_Col];
-            }
+
+                return m_Matrixboard[i_MatrixRow, i_MatrixColumn];
         }
 
         private void fillBoardWithBlankSpaces()

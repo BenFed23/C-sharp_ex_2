@@ -147,7 +147,7 @@ namespace Ex02
                 Console.Write($"{row + 1} |");
                 for (int col = 0; col < boardSize; col++)
                 {
-                    char cellSign = getCellCharacter(i_GameBoard[row, col]);
+                    char cellSign = getCellCharacter(i_GameBoard.GetCellValue(row, col));
                     Console.Write($" {cellSign} |");
                 }
 
