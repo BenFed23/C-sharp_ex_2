@@ -9,7 +9,6 @@ namespace Ex02
         {
             Game newGame = new Game();
             newGame.Run();
-            //checkForRematch();
         }
     }
 }

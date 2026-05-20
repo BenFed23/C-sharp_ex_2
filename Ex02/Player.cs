@@ -6,42 +6,41 @@ namespace Ex02
 {
     internal class Player
     {
-        private int m_score;
-        private TicTacToeBoard.CellState m_sign;
-        private string m_name;
+        private int m_Score;
+        private TicTacToeBoard.eCellState m_Sign;
+        private string m_Name;
 
-        public Player(TicTacToeBoard.CellState i_sign, string i_name) 
+        public Player(TicTacToeBoard.eCellState i_Sign, string i_Name) 
         {
-            m_sign = i_sign;
-            m_name = i_name;
-            m_score = 0;
-          
+            m_Sign = i_Sign;
+            m_Name = i_Name;
+            m_Score = 0;
         }
-        public TicTacToeBoard.CellState Sign
+
+        public TicTacToeBoard.eCellState Sign
         {
             get
             {
-                return m_sign;
-            }
-           
+                return m_Sign;
+            }   
         }
       
         public int Score
         {
             get
             {
-                return m_score;
+                return m_Score;
             }
             set
             {
-                m_score = value;
+                m_Score = value;
             }
         }
         public string Name 
         {
             get
             {
-                return m_name;
+                return m_Name;
             }
         }
     }

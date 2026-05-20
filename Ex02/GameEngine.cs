@@ -5,34 +5,37 @@ namespace Ex02
 {
     internal class GameEngine
     {
-        public bool IsFullRowColumnOrDiagonalInBoard(TicTacToeBoard i_board)
+        private const int k_NoDirection = 0;
+        private const int k_PositiveDirection = 1;
+        private const int k_NegativeDirection = -1;
+
+        public bool IsFullRowColumnOrDiagonalInBoard(TicTacToeBoard i_Board)
         {
-            int boardSize = i_board.GetLength();
+            int boardSize = i_Board.GetLength();
             bool isFullRow = false;
             bool isFullColumn = false;
             bool isFullLeftToRightDiagonal = false;
             bool isFullRightToLeftDiagonal = false;
 
-
             for (int i = 0; i < boardSize; ++i)
             {
-                if(checkIfLineIsFull(i_board, i, 0, 0, 1))
+                if(checkIfLineIsFull(i_Board, i, 0, k_NoDirection, k_PositiveDirection))
                 {
                     isFullRow = true;
                 }
 
-                if (checkIfLineIsFull(i_board, 0, i, 1, 0))
+                if (checkIfLineIsFull(i_Board, 0, i, k_PositiveDirection, k_NoDirection))
                 {
                     isFullColumn = true;
                 }
             }
 
-            if (checkIfLineIsFull(i_board, 0, 0, 1, 1))
+            if (checkIfLineIsFull(i_Board, 0, 0, k_PositiveDirection, k_PositiveDirection))
             {
                 isFullLeftToRightDiagonal = true;
             }
 
-            if (checkIfLineIsFull(i_board, 0, boardSize - 1, 1, -1))
+            if (checkIfLineIsFull(i_Board, 0, boardSize - 1, k_PositiveDirection, k_NegativeDirection))
             {
                 isFullRightToLeftDiagonal = true;
             }
@@ -40,30 +43,30 @@ namespace Ex02
             return (isFullRow || isFullColumn || isFullLeftToRightDiagonal || isFullRightToLeftDiagonal);
         }
 
-        private bool checkIfLineIsFull(TicTacToeBoard i_board, int i_StartRowIndex, int i_StartColumnIndex, int i_Rowdirection, int i_ColumnDirection)
+        private bool checkIfLineIsFull(TicTacToeBoard i_Board, int i_StartRowIndex, int i_StartColumnIndex, 
+            int i_RowDirection, int i_ColumnDirection)
         {
-            int boardSize = i_board.GetLength();
+            int boardSize = i_Board.GetLength();
             bool isLineFull = true;
-            TicTacToeBoard.CellState firstInLine = i_board[i_StartRowIndex, i_StartColumnIndex];
+            TicTacToeBoard.eCellState firstInLine = i_Board[i_StartRowIndex, i_StartColumnIndex];
 
-            if(firstInLine == TicTacToeBoard.CellState.Empty)
+            if(firstInLine == TicTacToeBoard.eCellState.Empty)
             {
                 isLineFull = false;
             }
 
             if(isLineFull)
             {
-                int currentRow = i_StartRowIndex;
+                int currentRowIndex = i_StartRowIndex;
                 int currentColumnIndex = i_StartColumnIndex;
-
                 for( int i = 0; i< boardSize; ++i ) 
                 {
-                    if (i_board[currentRow, currentColumnIndex] != firstInLine) 
+                    if (i_Board[currentRowIndex, currentColumnIndex] != firstInLine) 
                     {
                         isLineFull = false;
                     }
 
-                    currentRow += i_Rowdirection;
+                    currentRowIndex += i_RowDirection;
                     currentColumnIndex += i_ColumnDirection;
                 }
             }
@@ -71,72 +74,63 @@ namespace Ex02
             return isLineFull;
         }
 
-        public bool isFullBoard (TicTacToeBoard i_board)
+        public bool isFullBoard (TicTacToeBoard i_Board)
         {
-            bool isFullBoard = true;
-
-            while(isFullBoard && i_board.TryGetNextCell(out TicTacToeBoard.CellState currentCell))
-            {
-                if (currentCell == TicTacToeBoard.CellState.Empty)
-                {
-                    isFullBoard = false;
-                }
-            }
-
-            return isFullBoard;
+            return i_Board.CheckIfBoardIsFull();
         }
-        public static bool MiroringOpponet(TicTacToeBoard i_gameBoard,int i_boardRow ,int i_boardColom, Player i_computerPlayer )
+
+        public static bool MiroringOpponet(TicTacToeBoard i_GameBoard,int i_BoardRow ,int i_BoardColumn, TicTacToeBoard.eCellState i_ComputerSign)
         {
-            bool successMiroring=true;
-            int mirorRow = i_gameBoard.GetLength() - 1 - i_boardRow;
-            int mirorColom = i_gameBoard.GetLength() - 1 - i_boardColom;
-            if (!i_gameBoard.IsCellEmpty(mirorRow, mirorColom))
+            bool successMiroring = true;
+            int mirorRow = i_GameBoard.GetLength() - 1 - i_BoardRow;
+            int mirorColumn = i_GameBoard.GetLength() - 1 - i_BoardColumn;
+
+            if (!i_GameBoard.IsCellEmpty(mirorRow, mirorColumn))
             {
                 successMiroring = false;
             }
             else
-            {
-                
-                i_gameBoard.FillCell(mirorRow, mirorColom,i_computerPlayer);
+            {   
+                i_GameBoard.FillCell(mirorRow, mirorColumn, i_ComputerSign);
             }
 
             return successMiroring;
         }
-        public static bool MinDamage(TicTacToeBoard i_gameBoard, int i_boardRow, int i_boardColom, Player i_computerPlayer)
+
+        public static bool MinDamage(TicTacToeBoard i_GameBoard, TicTacToeBoard.eCellState i_ComputerSign)
         {
-            bool successMove=true;
+            bool successMove = true;
             const int k_InitialMaxRisk = 100;
             int minRisk = k_InitialMaxRisk;
             int minCellRow = 0;
-            int minCellColom = 0;
-            for (int i = 0; i < i_gameBoard.GetLength(); i++)
+            int minCellColumn = 0;
+
+            for (int i = 0; i < i_GameBoard.GetLength(); i++)
             {
-               for(int j = 0; j < i_gameBoard.GetLength(); j++)
-                {
-                    int rowOCount =0;
-                    int colomOCount = 0;
+               for(int j = 0; j < i_GameBoard.GetLength(); j++)
+               {
+                    int rowOCount = 0;
+                    int columnOCount = 0;
                     int leftDiagonalOCount = 0;
-                    if (i_gameBoard.IsCellEmpty(i, j))
+                    if (i_GameBoard.IsCellEmpty(i, j))
                     {
-                        GetCellRisk(i_gameBoard, i_computerPlayer, i, j,out rowOCount, out colomOCount, out leftDiagonalOCount);
-
-
-                        int maxCellOCount = Math.Max(rowOCount, colomOCount);
+                        GetCellRisk(i_GameBoard, i_ComputerSign, i, j,out rowOCount, out columnOCount, out leftDiagonalOCount);
+                        int maxCellOCount = Math.Max(rowOCount, columnOCount);
                         int maxCellDiagonalOCount = Math.Max(leftDiagonalOCount, maxCellOCount);
                         int maxOcount = Math.Max(maxCellOCount, maxCellDiagonalOCount);
                         if (maxOcount < minRisk)
                         {
                             minCellRow = i;
-                            minCellColom = j;
+                            minCellColumn = j;
                             minRisk = maxOcount;
                         }
                     }
-                }
+               }
             }
-            if (minRisk < i_gameBoard.GetLength() - 1)
-            {
-                i_gameBoard.FillCell(minCellRow, minCellColom, i_computerPlayer);
 
+            if(minRisk < i_GameBoard.GetLength() - 1)
+            {
+                i_GameBoard.FillCell(minCellRow, minCellColumn, i_ComputerSign);
             }
             else
             {
@@ -145,69 +139,76 @@ namespace Ex02
 
             return successMove;
         }
-        public static void RandomMove(TicTacToeBoard i_gameBoard, Player i_computerPlayer)
+
+        public static void RandomMove(TicTacToeBoard i_GameBoard, TicTacToeBoard.eCellState i_ComputerSign)
         {
             Random random = new Random();
-            int startRow = random.Next(0, i_gameBoard.GetLength());
-            int startCol = random.Next(0, i_gameBoard.GetLength());
+            int startRow = random.Next(0, i_GameBoard.GetLength());
+            int startCol = random.Next(0, i_GameBoard.GetLength());
 
-            for (int i = 0; i < i_gameBoard.GetLength(); i++)
+            for (int i = 0; i < i_GameBoard.GetLength(); i++)
             {
-                int row = (startRow + i) % i_gameBoard.GetLength();
-
-                for (int j = 0; j < i_gameBoard.GetLength(); j++)
+                int row = (startRow + i) % i_GameBoard.GetLength();
+                for (int j = 0; j < i_GameBoard.GetLength(); j++)
                 {
-                    int col = (startCol + j) % i_gameBoard.GetLength();
-
-                   
-                    if (i_gameBoard.IsCellEmpty(row, col))
+                    int col = (startCol + j) % i_GameBoard.GetLength();
+                    if (i_GameBoard.IsCellEmpty(row, col))
                     {
-                        i_gameBoard.FillCell(row, col, i_computerPlayer);
+                        i_GameBoard.FillCell(row, col, i_ComputerSign);
                         return; 
                     }
                 }
             }
-
         }
-        public static void ComputerMove(TicTacToeBoard i_gameBoard, int i_boardRow, int i_boardColom, Player i_computerPlayer) 
+
+        public static void ComputerMove(TicTacToeBoard i_GameBoard, TicTacToeBoard.eCellState i_ComputerSign) 
         {
-            bool ismoveMade = MiroringOpponet(i_gameBoard , i_boardRow, i_boardColom , i_computerPlayer);
+            bool ismoveMade = trySmartMove(i_GameBoard, i_ComputerSign);
+
             if (!ismoveMade)
             {
-                ismoveMade = MinDamage(i_gameBoard, i_boardRow, i_boardColom, i_computerPlayer);
-            }
-             if(!ismoveMade)
-            {
-                RandomMove(i_gameBoard,  i_computerPlayer);
+                RandomMove(i_GameBoard, i_ComputerSign);
             }
         }
-        public static void GetCellRisk(TicTacToeBoard i_gameBoard , Player i_computerPlayer ,int i_extendIndex , int i_inerrIndex , out int o_rowOCount , out int o_colomOCount , out int o_leftDiagonalOCount)
+
+        public static bool trySmartMove(TicTacToeBoard i_Board, TicTacToeBoard.eCellState i_computerSign)
         {
-            o_rowOCount = 0;
-            o_colomOCount = 0;
-            o_leftDiagonalOCount = 0;
-            for (int k = 0; k < i_gameBoard.GetLength(); k++)
+            bool ismoveMade = false;
+
+            ismoveMade = MinDamage(i_Board, i_computerSign);
+            
+            return ismoveMade;
+        }
+
+        public static void GetCellRisk(TicTacToeBoard i_GameBoard , TicTacToeBoard.eCellState i_ComputerSign, 
+            int i_ExtendIndex , int i_InnerIndex , out int o_RowOCount , out int o_ColumnOCount , out int o_LeftDiagonalOCount)
+        {
+            o_RowOCount = 0;
+            o_ColumnOCount = 0;
+            o_LeftDiagonalOCount = 0;
+            for (int k = 0; k < i_GameBoard.GetLength(); k++)
             {
-
-                if (i_gameBoard[i_extendIndex, k] == i_computerPlayer.Sign)
+                if (i_GameBoard[i_ExtendIndex, k] == i_ComputerSign)
                 {
-                    o_rowOCount++;
+                    o_RowOCount++;
                 }
 
-
-                if (i_gameBoard[k, i_inerrIndex] == i_computerPlayer.Sign)
+                if (i_GameBoard[k, i_InnerIndex] == i_ComputerSign)
                 {
-                    o_colomOCount++;
+                    o_ColumnOCount++;
                 }
 
-
-                if (i_extendIndex == i_inerrIndex && i_gameBoard[k, k] == i_computerPlayer.Sign)
+                if (i_ExtendIndex == i_InnerIndex && i_GameBoard[k, k] == i_ComputerSign)
                 {
-                    o_leftDiagonalOCount++;
+                    o_LeftDiagonalOCount++;
                 }
-
-
             }
+        }
+
+        public TicTacToeBoard.eCellState GetWinningSign(TicTacToeBoard.eCellState i_Player1Sign, TicTacToeBoard.eCellState i_Player2Sign, 
+            TicTacToeBoard.eCellState i_CurrentPlayerSign)
+        {
+            return (i_CurrentPlayerSign == i_Player1Sign) ? i_Player2Sign : i_Player1Sign;
         }
     }
 }
