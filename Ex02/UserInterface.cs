@@ -36,17 +36,19 @@ namespace Ex02
 
         private bool GetValidGameMode() 
         {
-            int gameModeChoice;
+            int chosenMode;
 
-            Console.WriteLine("Please choose game mode: press {0} for 2 players, press {1} for player against computer", TicTacToeBoard.k_TwoPlayerMode, TicTacToeBoard.k_ComputerMode);
+            Console.WriteLine("Please choose game mode: press {0} for 2 players, press {1} for player against computer", (int)eGameMode.TwoPlayerMode, (int)eGameMode.ComputerMode);
             string userInput = Console.ReadLine();
-            while(!int.TryParse(userInput, out gameModeChoice) || (gameModeChoice != TicTacToeBoard.k_TwoPlayerMode && gameModeChoice != TicTacToeBoard.k_ComputerMode))
+            while(!int.TryParse(userInput, out chosenMode) || (chosenMode != (int)eGameMode.TwoPlayerMode && chosenMode != (int)eGameMode.ComputerMode))
             {
-                Console.WriteLine("Invalid Choice! Please enter {0} for 2 players and {1} for player against computer", TicTacToeBoard.k_TwoPlayerMode, TicTacToeBoard.k_ComputerMode);
+                Console.WriteLine("Invalid Choice! Please enter {0} for 2 players and {1} for player against computer", (int)eGameMode.TwoPlayerMode, (int)eGameMode.ComputerMode);
                 userInput = Console.ReadLine();
             }
 
-            return gameModeChoice == TicTacToeBoard.k_ComputerMode;
+            eGameMode chosenGameMode = getGameModeFromInt(chosenMode);
+
+            return (chosenGameMode == eGameMode.ComputerMode);
         }
 
         public void GetValidNextMoveFromUser(int i_BoardSize, out int o_RowNumber, out int o_ColumnNumber, out bool o_WasQKeyPressed)
@@ -129,7 +131,6 @@ namespace Ex02
             return isValidTwoNumbersAndComma;
         }
 
-
         public void DrawBoard(TicTacToeBoard i_GameBoard)
         {
             int boardSize = i_GameBoard.GetLength();
@@ -183,6 +184,11 @@ namespace Ex02
             }
 
             return cellChar;
+        }
+
+        private eGameMode getGameModeFromInt(int i_IntGameMode)
+        {
+            return (i_IntGameMode == 0) ? eGameMode.TwoPlayerMode : eGameMode.ComputerMode;
         }
 
         public bool AskForRematch()

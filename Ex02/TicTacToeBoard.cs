@@ -7,9 +7,7 @@ namespace Ex02
     {
         public const int k_MinBoardSize = 3;
         public const int k_MaxBoardSize = 9;
-        public const int k_TwoPlayerMode = 1;
-        public const int k_ComputerMode = 2;
-
+      
         private readonly int r_BoardSize;
         private eCellState[,] m_Matrixboard;
 
