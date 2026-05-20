@@ -5,33 +5,35 @@ namespace Ex02
 {
     internal class Game
     {
-        private readonly UserInterface m_UserInterface;
+        private readonly UserInterface r_UserInterface;
         private GameEngine m_Engine;
         private TicTacToeBoard m_Board;
-        private Player m_Player1;
-        private Player m_Player2;
+        private readonly Player r_Player1;
+        private readonly Player r_Player2;
         private Player m_CurrentPlayer;
         private bool m_IsAgainstComputer;
 
         public Game() 
         {
-            m_UserInterface = new UserInterface();
-            m_Player1 = new Player(TicTacToeBoard.CellState.X, "Player 1");
-            m_Player2 = new Player(TicTacToeBoard.CellState.O, "Player 2");
+            r_UserInterface = new UserInterface();
+            r_Player1 = new Player(TicTacToeBoard.eCellState.X, "Player 1");
+            r_Player2 = new Player(TicTacToeBoard.eCellState.O, "Player 2");
 
-            m_CurrentPlayer = m_Player1;
+            m_CurrentPlayer = r_Player1;
         }
+
         public void Run() 
         {
             bool isCountinueToRematch = true;
-            m_UserInterface.GetGameSettingsFromUser(out int boardSize, out m_IsAgainstComputer);
+
+            r_UserInterface.GetGameSettingsFromUser(out int boardSize, out m_IsAgainstComputer);
             m_Engine = new GameEngine();
             while(isCountinueToRematch)
             {
                 m_Board = new TicTacToeBoard(boardSize);
-                m_CurrentPlayer = m_Player1;
+                m_CurrentPlayer = r_Player1;
                 runGameLoop();
-                isCountinueToRematch = m_UserInterface.AskForRematch();
+                isCountinueToRematch = r_UserInterface.AskForRematch();
             }
         }
 
@@ -43,62 +45,61 @@ namespace Ex02
 
             while (!isGameOver)
             {
-                m_UserInterface.ClearScreen();
-                m_UserInterface.DrawBoard(m_Board);
-                m_UserInterface.AnnounceTurn(m_CurrentPlayer.Name);
+                r_UserInterface.ClearScreen();
+                r_UserInterface.DrawBoard(m_Board);
+                r_UserInterface.AnnounceTurn(m_CurrentPlayer.Name);
                 bool wasQKeyPressed = false;
                 int boardRowIndex = 0;
-                int boardColIndex = 0;
-                if (m_CurrentPlayer == m_Player2 && m_IsAgainstComputer)
+                int boardColumnIndex = 0;
+                if (m_CurrentPlayer == r_Player2 && m_IsAgainstComputer)
                 {
-                    GameEngine.ComputerMove(m_Board, m_Player2.Sign);
+                    GameEngine.ComputerMove(m_Board, r_Player2.Sign);
                 }
                 else
                 {
-                    m_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out wasQKeyPressed);
+                    r_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out wasQKeyPressed);
                     if (wasQKeyPressed)
                     {
-                        m_UserInterface.AnnounceGameStopped();
+                        r_UserInterface.AnnounceGameStopped();
                         break;
                     }
 
                     boardRowIndex = boardRow - 1;
-                    boardColIndex = boardColumn - 1;
-                    bool isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer.Sign);
+                    boardColumnIndex = boardColumn - 1;
+                    bool isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColumnIndex, m_CurrentPlayer.Sign);
                     while (!isMoveSuccessful)
                     {
-                        m_UserInterface.ClearScreen();
-                        m_UserInterface.DrawBoard(m_Board);
-                        m_UserInterface.AnnounceInvalidMove();
-                        m_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out wasQKeyPressed);
+                        r_UserInterface.ClearScreen();
+                        r_UserInterface.DrawBoard(m_Board);
+                        r_UserInterface.AnnounceInvalidMove();
+                        r_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out wasQKeyPressed);
                         if (wasQKeyPressed)
                         {
-                            m_UserInterface.AnnounceGameStopped();
+                            r_UserInterface.AnnounceGameStopped();
                             isGameOver = true;
                             break;
                         }
 
                         boardRowIndex = boardRow - 1;
-                        boardColIndex = boardColumn - 1;
-                        isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColIndex, m_CurrentPlayer.Sign);
+                        boardColumnIndex = boardColumn - 1;
+                        isMoveSuccessful = m_Board.FillCell(boardRowIndex, boardColumnIndex, m_CurrentPlayer.Sign);
                     }
                 }
 
+                r_UserInterface.ClearScreen();
+                r_UserInterface.DrawBoard(m_Board);
+
                 if (m_Engine.IsFullRowColumnOrDiagonalInBoard(m_Board))
                 {
-                    m_UserInterface.ClearScreen();
-                    m_UserInterface.DrawBoard(m_Board);
-                    TicTacToeBoard.CellState winningSign = m_Engine.GetWinningSign(m_Player1.Sign, m_Player2.Sign, m_CurrentPlayer.Sign);
-                    Player winner = (winningSign == m_Player1.Sign) ? m_Player1 : m_Player2;
-                    winner.Score++;
-                    m_UserInterface.AnnounceGameOver(m_CurrentPlayer.Name, winner.Name, winner.Score);
+                    TicTacToeBoard.eCellState winningPlayerSign = m_Engine.GetWinningSign(r_Player1.Sign, r_Player2.Sign, m_CurrentPlayer.Sign);
+                    Player winningPlayer = (winningPlayerSign == r_Player1.Sign) ? r_Player1 : r_Player2;
+                    winningPlayer.Score++;
+                    r_UserInterface.AnnounceGameOver(m_CurrentPlayer.Name, winningPlayer.Name, winningPlayer.Score);
                     isGameOver = true;
                 }
                 else if (m_Engine.isFullBoard(m_Board))
                 {
-                    m_UserInterface.ClearScreen();
-                    m_UserInterface.DrawBoard(m_Board);
-                    m_UserInterface.AnnounceTie();
+                    r_UserInterface.AnnounceTie();
                     isGameOver = true;
                 }
                 else
@@ -110,7 +111,7 @@ namespace Ex02
 
         private void switchPlayer()
         {
-            m_CurrentPlayer = (m_CurrentPlayer == m_Player1) ? m_Player2 : m_Player1;
+            m_CurrentPlayer = (m_CurrentPlayer == r_Player1) ? r_Player2 : r_Player1;
         }
     } 
 }
