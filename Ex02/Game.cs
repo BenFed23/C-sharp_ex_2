@@ -16,8 +16,8 @@ namespace Ex02
         public Game() 
         {
             r_UserInterface = new UserInterface();
-            r_Player1 = new Player(TicTacToeBoard.eCellState.X, "Player 1");
-            r_Player2 = new Player(TicTacToeBoard.eCellState.O, "Player 2");
+            r_Player1 = new Player(eCellState.X, "Player 1");
+            r_Player2 = new Player(eCellState.O, "Player 2");
 
             m_CurrentPlayer = r_Player1;
         }
@@ -48,7 +48,7 @@ namespace Ex02
                 r_UserInterface.ClearScreen();
                 r_UserInterface.DrawBoard(m_Board);
                 r_UserInterface.AnnounceTurn(m_CurrentPlayer.Name);
-                bool wasQKeyPressed = false;
+                bool isQuitRequested = false;
                 int boardRowIndex = 0;
                 int boardColumnIndex = 0;
                 if (m_CurrentPlayer == r_Player2 && m_IsAgainstComputer)
@@ -57,8 +57,8 @@ namespace Ex02
                 }
                 else
                 {
-                    r_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out wasQKeyPressed);
-                    if (wasQKeyPressed)
+                    r_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out isQuitRequested);
+                    if (isQuitRequested)
                     {
                         r_UserInterface.AnnounceGameStopped();
                         break;
@@ -72,8 +72,8 @@ namespace Ex02
                         r_UserInterface.ClearScreen();
                         r_UserInterface.DrawBoard(m_Board);
                         r_UserInterface.AnnounceInvalidMove();
-                        r_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out wasQKeyPressed);
-                        if (wasQKeyPressed)
+                        r_UserInterface.GetValidNextMoveFromUser(m_Board.GetLength(), out boardRow, out boardColumn, out isQuitRequested);
+                        if (isQuitRequested)
                         {
                             r_UserInterface.AnnounceGameStopped();
                             isGameOver = true;
@@ -91,7 +91,7 @@ namespace Ex02
 
                 if (m_Engine.IsFullRowColumnOrDiagonalInBoard(m_Board))
                 {
-                    TicTacToeBoard.eCellState winningPlayerSign = m_Engine.GetWinningSign(r_Player1.Sign, r_Player2.Sign, m_CurrentPlayer.Sign);
+                    eCellState winningPlayerSign = m_Engine.GetWinningSign(r_Player1.Sign, r_Player2.Sign, m_CurrentPlayer.Sign);
                     Player winningPlayer = (winningPlayerSign == r_Player1.Sign) ? r_Player1 : r_Player2;
                     winningPlayer.Score++;
                     r_UserInterface.AnnounceGameOver(m_CurrentPlayer.Name, winningPlayer.Name, winningPlayer.Score);

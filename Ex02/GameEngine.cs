@@ -48,9 +48,9 @@ namespace Ex02
         {
             int boardSize = i_Board.GetLength();
             bool isLineFull = true;
-            TicTacToeBoard.eCellState firstInLine = i_Board[i_StartRowIndex, i_StartColumnIndex];
+            eCellState firstInLine = i_Board[i_StartRowIndex, i_StartColumnIndex];
 
-            if(firstInLine == TicTacToeBoard.eCellState.Empty)
+            if(firstInLine == eCellState.Empty)
             {
                 isLineFull = false;
             }
@@ -79,7 +79,7 @@ namespace Ex02
             return i_Board.CheckIfBoardIsFull();
         }
 
-        public static bool MiroringOpponet(TicTacToeBoard i_GameBoard,int i_BoardRow ,int i_BoardColumn, TicTacToeBoard.eCellState i_ComputerSign)
+        public static bool MiroringOpponet(TicTacToeBoard i_GameBoard,int i_BoardRow ,int i_BoardColumn, eCellState i_ComputerSign)
         {
             bool successMiroring = true;
             int mirorRow = i_GameBoard.GetLength() - 1 - i_BoardRow;
@@ -97,7 +97,7 @@ namespace Ex02
             return successMiroring;
         }
 
-        public static bool MinDamage(TicTacToeBoard i_GameBoard, TicTacToeBoard.eCellState i_ComputerSign)
+        public static bool MinDamage(TicTacToeBoard i_GameBoard, eCellState i_ComputerSign)
         {
             bool successMove = true;
             const int k_InitialMaxRisk = 100;
@@ -140,7 +140,7 @@ namespace Ex02
             return successMove;
         }
 
-        public static void RandomMove(TicTacToeBoard i_GameBoard, TicTacToeBoard.eCellState i_ComputerSign)
+        public static void RandomMove(TicTacToeBoard i_GameBoard, eCellState i_ComputerSign)
         {
             Random random = new Random();
             int startRow = random.Next(0, i_GameBoard.GetLength());
@@ -161,7 +161,7 @@ namespace Ex02
             }
         }
 
-        public static void ComputerMove(TicTacToeBoard i_GameBoard, TicTacToeBoard.eCellState i_ComputerSign) 
+        public static void ComputerMove(TicTacToeBoard i_GameBoard, eCellState i_ComputerSign) 
         {
             bool ismoveMade = trySmartMove(i_GameBoard, i_ComputerSign);
 
@@ -171,7 +171,7 @@ namespace Ex02
             }
         }
 
-        public static bool trySmartMove(TicTacToeBoard i_Board, TicTacToeBoard.eCellState i_computerSign)
+        public static bool trySmartMove(TicTacToeBoard i_Board, eCellState i_computerSign)
         {
             bool ismoveMade = false;
 
@@ -180,7 +180,7 @@ namespace Ex02
             return ismoveMade;
         }
 
-        public static void GetCellRisk(TicTacToeBoard i_GameBoard , TicTacToeBoard.eCellState i_ComputerSign, 
+        public static void GetCellRisk(TicTacToeBoard i_GameBoard , eCellState i_ComputerSign, 
             int i_ExtendIndex , int i_InnerIndex , out int o_RowOCount , out int o_ColumnOCount , out int o_LeftDiagonalOCount)
         {
             o_RowOCount = 0;
@@ -205,8 +205,7 @@ namespace Ex02
             }
         }
 
-        public TicTacToeBoard.eCellState GetWinningSign(TicTacToeBoard.eCellState i_Player1Sign, TicTacToeBoard.eCellState i_Player2Sign, 
-            TicTacToeBoard.eCellState i_CurrentPlayerSign)
+        public eCellState GetWinningSign(eCellState i_Player1Sign, eCellState i_Player2Sign, eCellState i_CurrentPlayerSign)
         {
             return (i_CurrentPlayerSign == i_Player1Sign) ? i_Player2Sign : i_Player1Sign;
         }

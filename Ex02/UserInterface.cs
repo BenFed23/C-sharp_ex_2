@@ -6,11 +6,10 @@ namespace Ex02
 {
     internal class UserInterface
     {
-        private const int k_MinBoardSize = 3;
-        private const int k_MaxBoardSize = 9;
-        private const int k_TwoPlayersMode = 1;
-        private const int k_AgainstComputerMode = 2;
         private const string k_QuitKey = "Q";
+        private const char k_XSign = 'X';
+        private const char k_OSign = 'O';
+        private const char k_EmptySign = ' ';
 
         public void GetGameSettingsFromUser(out int o_BoardSize, out bool o_IsComputerPlayer)
         {
@@ -21,12 +20,14 @@ namespace Ex02
         private int GetValidBoardSize() 
         {
             int boardSize = 0;
+            int minBoardSize = TicTacToeBoard.k_MinBoardSize;
+            int maxBoardSize = TicTacToeBoard.k_MaxBoardSize;
 
-            Console.WriteLine("Please enter board size (a number between {0} and {1}):", k_MinBoardSize, k_MaxBoardSize);
+            Console.WriteLine("Please enter board size (a number between {0} and {1}):", minBoardSize, maxBoardSize);
             string userInput = Console.ReadLine();
-            while(!int.TryParse(userInput, out boardSize) || boardSize < k_MinBoardSize || boardSize > k_MaxBoardSize)
+            while(!int.TryParse(userInput, out boardSize) || boardSize < minBoardSize || boardSize > maxBoardSize)
             {
-                Console.WriteLine("Invalid input! Board size should be a number between {0} and {1}", k_MinBoardSize, k_MaxBoardSize);
+                Console.WriteLine("Invalid input! Board size should be a number between {0} and {1}", minBoardSize, maxBoardSize);
                 userInput = Console.ReadLine();
             }
 
@@ -35,17 +36,19 @@ namespace Ex02
 
         private bool GetValidGameMode() 
         {
-            int gameModeChoice;
+            int chosenMode;
 
-            Console.WriteLine("Please choose game mode: press {0} for 2 players, press {1} for player against computer", k_TwoPlayersMode, k_AgainstComputerMode);
+            Console.WriteLine("Please choose game mode: press {0} for 2 players, press {1} for player against computer", (int)eGameMode.TwoPlayerMode, (int)eGameMode.ComputerMode);
             string userInput = Console.ReadLine();
-            while(!int.TryParse(userInput, out gameModeChoice) || (gameModeChoice != k_TwoPlayersMode && gameModeChoice != k_AgainstComputerMode))
+            while(!int.TryParse(userInput, out chosenMode) || (chosenMode != (int)eGameMode.TwoPlayerMode && chosenMode != (int)eGameMode.ComputerMode))
             {
-                Console.WriteLine("Invalid Choice! Please enter {0} for 2 players and {1} for player against computer", k_TwoPlayersMode, k_AgainstComputerMode);
+                Console.WriteLine("Invalid Choice! Please enter {0} for 2 players and {1} for player against computer", (int)eGameMode.TwoPlayerMode, (int)eGameMode.ComputerMode);
                 userInput = Console.ReadLine();
             }
 
-            return gameModeChoice == k_AgainstComputerMode;
+            eGameMode chosenGameMode = getGameModeFromInt(chosenMode);
+
+            return (chosenGameMode == eGameMode.ComputerMode);
         }
 
         public void GetValidNextMoveFromUser(int i_BoardSize, out int o_RowNumber, out int o_ColumnNumber, out bool o_WasQKeyPressed)
@@ -128,7 +131,6 @@ namespace Ex02
             return isValidTwoNumbersAndComma;
         }
 
-
         public void DrawBoard(TicTacToeBoard i_GameBoard)
         {
             int boardSize = i_GameBoard.GetLength();
@@ -164,24 +166,29 @@ namespace Ex02
             }
         }
 
-        private char getCellCharacter(TicTacToeBoard.eCellState i_eCellState)
+        private char getCellCharacter(eCellState i_CellState)
         {
             char cellChar = ' ';
 
-            switch(i_eCellState)
+            switch(i_CellState)
             {
-                case TicTacToeBoard.eCellState.X:
-                    cellChar = TicTacToeBoard.k_XSign;
+                case eCellState.X:
+                    cellChar = k_XSign;
                     break;
-                case TicTacToeBoard.eCellState.O:
-                    cellChar = TicTacToeBoard.k_OSign;
+                case eCellState.O:
+                    cellChar = k_OSign;
                     break;
-                case TicTacToeBoard.eCellState.Empty:
-                    cellChar = TicTacToeBoard.k_EmptySign;
+                case eCellState.Empty:
+                    cellChar = k_EmptySign;
                     break;
             }
 
             return cellChar;
+        }
+
+        private eGameMode getGameModeFromInt(int i_IntGameMode)
+        {
+            return (i_IntGameMode == 0) ? eGameMode.TwoPlayerMode : eGameMode.ComputerMode;
         }
 
         public bool AskForRematch()
